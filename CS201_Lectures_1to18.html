@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS201 – Lectures 1–18 Study Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Code+Pro:wght@400;600&family=Lato:wght@300;400;700&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --card: #1c2230;
+    --border: #2a3347;
+    --accent: #f0a500;
+    --accent2: #38bdf8;
+    --text: #e2e8f0;
+    --muted: #8b9ab0;
+    --code-bg: #0a0e16;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2236 60%, #0f1923 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(240,165,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+  .toc h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--accent2);
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.4rem;
+  }
+  .toc a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.82rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    border-left: 2px solid transparent;
+  }
+  .toc a:hover { color: var(--accent); border-left-color: var(--accent); background: rgba(240,165,0,0.05); }
+
+  .lecture {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    scroll-margin-top: 1rem;
+  }
+  .lecture-header {
+    background: linear-gradient(90deg, rgba(240,165,0,0.12) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 1.1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .lec-num {
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: rgba(240,165,0,0.12);
+    border: 1px solid rgba(240,165,0,0.3);
+    border-radius: 6px;
+    padding: 0.2rem 0.55rem;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .lecture-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .lecture-body { padding: 1.4rem 1.5rem; }
+
+  .topic { margin-bottom: 1.3rem; }
+  .topic:last-child { margin-bottom: 0; }
+
+  .topic-title {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .topic-title::before { content: '▸'; color: var(--accent); font-size: 0.7rem; }
+
+  .topic-def {
+    color: var(--text);
+    font-size: 0.9rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--border);
+  }
+
+  /* Code block */
+  pre.code {
+    margin-top: 0.6rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.85rem 1.1rem;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    overflow-x: auto;
+    color: #abb2bf;
+    white-space: pre;
+  }
+  /* Syntax colours */
+  .kw  { color: #c678dd; }   /* keywords: int, if, for, return … */
+  .fn  { color: #61afef; }   /* function names */
+  .str { color: #98c379; }   /* string / char literals */
+  .num { color: #d19a66; }   /* numeric literals */
+  .cm  { color: #5c6370; font-style: italic; }  /* comments */
+  .op  { color: #56b6c2; }   /* operators & punctuation highlights */
+  .pp  { color: #e5c07b; }   /* preprocessor (#include, #define) */
+  .tp  { color: #e5c07b; }   /* type names when used standalone */
+
+  em.key {
+    font-style: normal;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .pill {
+    display: inline-block;
+    background: rgba(56,189,248,0.1);
+    border: 1px solid rgba(56,189,248,0.25);
+    color: var(--accent2);
+    font-size: 0.72rem;
+    border-radius: 99px;
+    padding: 0.1rem 0.55rem;
+    font-family: 'Source Code Pro', monospace;
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    letter-spacing: 1px;
+  }
+  @media (max-width: 600px) {
+    .lecture-body { padding: 1rem; }
+    .toc-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>CS201 – Introduction to Programming</h1>
+  <p>Lectures 1–18 &nbsp;·&nbsp; Important Topics &amp; Conceptual Definitions with Examples</p>
+</header>
+
+<div class="container">
+
+<!-- ══════════════ TOC ══════════════ -->
+<div class="toc">
+  <h2>📋 Quick Navigation</h2>
+  <div class="toc-grid">
+    <a href="#lec1">Lec 1 – What is Programming</a>
+    <a href="#lec2">Lec 2 – Software &amp; C History</a>
+    <a href="#lec3">Lec 3 – First C Program</a>
+    <a href="#lec4">Lec 4 – Operators &amp; Expressions</a>
+    <a href="#lec5">Lec 5 – Conditional Statements</a>
+    <a href="#lec6">Lec 6 – While Loop</a>
+    <a href="#lec7">Lec 7 – do-while &amp; for Loop</a>
+    <a href="#lec8">Lec 8 – Switch, Break, Continue</a>
+    <a href="#lec9">Lec 9 – Functions</a>
+    <a href="#lec10">Lec 10 – Header Files &amp; Scope</a>
+    <a href="#lec11">Lec 11 – Arrays</a>
+    <a href="#lec12">Lec 12 – Char Arrays &amp; 2D Arrays</a>
+    <a href="#lec13">Lec 13 – Array Manipulation</a>
+    <a href="#lec14">Lec 14 – Pointers</a>
+    <a href="#lec15">Lec 15 – Pointer Arithmetic</a>
+    <a href="#lec16">Lec 16 – Pointers to Pointers</a>
+    <a href="#lec17">Lec 17 – String Handling</a>
+    <a href="#lec18">Lec 18 – File Handling</a>
+  </div>
+</div>
+
+<!-- ══════════════ LEC 1 ══════════════ -->
+<div class="lecture" id="lec1">
+  <div class="lecture-header"><span class="lec-num">LEC 01</span><h2>What is Programming?</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">Program (Definition)</div>
+      <div class="topic-def">A <em class="key">precise sequence of steps</em> to solve a particular problem. A program tells a computer exactly what to do, in exactly the right order — nothing more, nothing less.</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Why Programming is Important</div>
+      <div class="topic-def">Develops <em class="key">analytical thinking</em>, <em class="key">critical reading</em>, and <em class="key">creative synthesis</em>. Programming is not just a vocational skill — it teaches problem-solving applicable to all professions.</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Key Programming Skills</div>
+      <div class="topic-def">
+        <span class="pill">Attention to Detail</span>
+        <span class="pill">Think Reusability</span>
+        <span class="pill">Good User Interface</span>
+        <span class="pill">Comment Code Liberally</span><br><br>
+        <strong>Computers are stupid</strong> — they do exactly what you say. You cannot be vague or assume the computer will "figure it out."
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Program Design Recipe</div>
+      <div class="topic-def">
+        1. <em class="key">Analyze</em> — Read and understand the problem statement carefully.<br>
+        2. <em class="key">Express</em> — Write its essence with examples and abstract ideas.<br>
+        3. <em class="key">Formulate</em> — Write precise pseudocode or a flowchart.<br>
+        4. <em class="key">Evaluate</em> — Test, check results, and revise until correct.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 2 ══════════════ -->
+<div class="lecture" id="lec2">
+  <div class="lecture-header"><span class="lec-num">LEC 02</span><h2>Software Categories &amp; History of C</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">System Software</div>
+      <div class="topic-def">Controls computer hardware. Sub-categories:<br>
+        <span class="pill">Operating System</span> — Manages CPU, memory, disk, peripherals (e.g. Windows, Linux).<br>
+        <span class="pill">Device Drivers</span> — Software that lets the OS communicate with specific hardware (e.g. sound card driver).<br>
+        <span class="pill">Utilities</span> — Specific tools like disk defragmenter or compression utility.<br>
+        <span class="pill">Compilers &amp; Interpreters</span> — Also classified as system software.
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Application Software</div>
+      <div class="topic-def">Programs designed for <em class="key">end users</em> to perform specific real-world tasks.<br>
+        Example: MS Word (word processing), a payroll system, GPS navigation app.
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">History of C Language</div>
+      <div class="topic-def">
+        Developed by <em class="key">Dennis Ritchie</em> at Bell Labs ~1972, built on BCPL and B languages.<br>
+        C became the development language of the UNIX operating system.<br>
+        Standardized as <em class="key">ANSI C</em> in 1989 (also known as C89).
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Development Tools (The Toolchain)</div>
+      <div class="topic-def">
+        <span class="pill">Editor</span> — Write source code as plain text (.c or .cpp file).<br>
+        <span class="pill">Compiler</span> — Translates whole program to machine code; stops at first syntax error.<br>
+        <span class="pill">Interpreter</span> — Translates and runs line-by-line; shows errors as it goes but is slower.<br>
+        <span class="pill">Linker</span> — Combines object code with library functions into one executable.<br>
+        <span class="pill">Loader</span> — Loads the executable from disk into RAM and starts execution.<br>
+        <span class="pill">Debugger</span> — Lets you pause, inspect variables, and trace logical errors at runtime.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 3 ══════════════ -->
+<div class="lecture" id="lec3">
+  <div class="lecture-header"><span class="lec-num">LEC 03</span><h2>First C Program, Variables &amp; Data Types</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">First C Program</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;iostream.h&gt;</span>   <span class="cm">// include standard I/O library</span>
+
+<span class="kw">main</span>()
+{
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Welcome to Virtual University"</span>;  <span class="cm">// print to screen</span>
+}</pre>
+      <div class="topic-def" style="margin-top:0.5rem">
+        <em class="key">#include</em> — preprocessor directive to include a library file.<br>
+        <em class="key">main()</em> — every C program starts executing from main().<br>
+        <em class="key">cout &lt;&lt;</em> — sends data to the screen (output stream).<br>
+        <em class="key">;</em> — every statement must end with a semicolon.
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Variables</div>
+      <div class="topic-def">Named <em class="key">memory locations</em> that store data. Every variable has a <em class="key">name</em>, <em class="key">type</em>, <em class="key">size</em>, and <em class="key">value</em>. Names must start with a letter (avoid leading underscore — reserved by libraries).</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Assignment Operator ( = )</div>
+      <div class="topic-def"><em class="key">x = 5</em> means "store the value 5 in memory location x." This is NOT algebraic equality. Left side must always be a single variable name.</div>
+<pre class="code"><span class="kw">int</span> x;
+x <span class="op">=</span> <span class="num">10</span>;           <span class="cm">// stores 10 in x</span>
+x <span class="op">=</span> x <span class="op">+</span> <span class="num">1</span>;        <span class="cm">// x becomes 11  (valid in C, not algebra)</span>
+x <span class="op">=</span> x <span class="op">*</span> <span class="num">2</span>;        <span class="cm">// x becomes 22</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Data Types</div>
+      <div class="topic-def">
+        <span class="pill">int</span> Whole numbers — 4 bytes — range: ~−2 billion to +2 billion<br>
+        <span class="pill">short</span> Small whole numbers — 2 bytes — range: −32768 to 32767<br>
+        <span class="pill">long</span> Very large whole numbers — 4+ bytes<br>
+        <span class="pill">float</span> Decimal numbers — 4 bytes — e.g. 3.14f<br>
+        <span class="pill">double</span> High-precision decimals — 8 bytes — e.g. 3.1415926<br>
+        <span class="pill">char</span> Single character — 1 byte — e.g. 'A', 'z', '5'
+      </div>
+<pre class="code"><span class="kw">int</span>    age    <span class="op">=</span> <span class="num">20</span>;
+<span class="kw">float</span>  gpa    <span class="op">=</span> <span class="num">3.75</span>;
+<span class="kw">double</span> salary <span class="op">=</span> <span class="num">45000.99</span>;
+<span class="kw">char</span>   grade  <span class="op">=</span> <span class="str">'A'</span>;       <span class="cm">// single quotes for char</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Arithmetic Operators &amp; Precedence</div>
+      <div class="topic-def">
+        <span class="pill">+</span> Addition &nbsp; <span class="pill">-</span> Subtraction &nbsp; <span class="pill">*</span> Multiplication &nbsp; <span class="pill">/</span> Division &nbsp; <span class="pill">%</span> Modulus (remainder)<br><br>
+        <em class="key">Integer division truncates</em>: 5 / 2 = 2 (not 2.5). Use float/double for decimal results.<br>
+        <em class="key">Modulus</em>: 5 % 2 = 1 &nbsp;|&nbsp; 23 % 5 = 3 &nbsp;|&nbsp; Only works with integers.<br>
+        <em class="key">Precedence</em>: ( ) → *, /, % → +, − &nbsp;(all left-to-right within same level)
+      </div>
+<pre class="code"><span class="kw">int</span> result;
+result <span class="op">=</span> <span class="num">10</span> <span class="op">+</span> <span class="num">10</span> <span class="op">*</span> <span class="num">5</span>;     <span class="cm">// = 60  (* first, then +)</span>
+result <span class="op">=</span> (<span class="num">10</span> <span class="op">+</span> <span class="num">10</span>) <span class="op">*</span> <span class="num">5</span>;   <span class="cm">// = 100 (parentheses force + first)</span>
+result <span class="op">=</span> <span class="num">7</span> <span class="op">%</span> <span class="num">3</span>;            <span class="cm">// = 1   (remainder of 7 / 3)</span></pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 4 ══════════════ -->
+<div class="lecture" id="lec4">
+  <div class="lecture-header"><span class="lec-num">LEC 04</span><h2>Expressions, cin &amp; Practical Examples</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">cin — Standard Input</div>
+      <div class="topic-def"><em class="key">cin &gt;&gt; variableName</em> reads user keyboard input and stores it in a variable. The program pauses and waits. Press Enter to confirm. Only ONE variable per &gt;&gt; token.</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;iostream.h&gt;</span>
+<span class="kw">main</span>()
+{
+    <span class="kw">int</span> age;
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Enter your age: "</span>;
+    <span class="fn">cin</span>  &gt;&gt; age;                  <span class="cm">// waits for user to type and press Enter</span>
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"You are "</span> &lt;&lt; age &lt;&lt; <span class="str">" years old."</span>;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Writing Algebraic Expressions in C</div>
+      <div class="topic-def">C has <em class="key">no power operator</em>. Use * repeatedly for powers. Use parentheses to make the order of evaluation explicit.</div>
+<pre class="code"><span class="cm">// Algebra: y = ax² + bx + c</span>
+y <span class="op">=</span> a <span class="op">*</span> x <span class="op">*</span> x <span class="op">+</span> b <span class="op">*</span> x <span class="op">+</span> c;
+
+<span class="cm">// Algebra: (b² - 4ac) / 2a</span>
+result <span class="op">=</span> (b <span class="op">*</span> b <span class="op">-</span> <span class="num">4</span> <span class="op">*</span> a <span class="op">*</span> c) <span class="op">/</span> (<span class="num">2</span> <span class="op">*</span> a);
+<span class="cm">// Without parentheses this would give the WRONG answer!</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Extracting Digits Using % and /</div>
+      <div class="topic-def"><em class="key">number % 10</em> gives the last digit. <em class="key">number / 10</em> (integer division) removes the last digit. Repeat to extract all digits one by one.</div>
+<pre class="code"><span class="kw">int</span> number <span class="op">=</span> <span class="num">7531</span>, digit;
+
+digit  <span class="op">=</span> number <span class="op">%</span> <span class="num">10</span>;   <span class="cm">// digit = 1  (last digit)</span>
+number <span class="op">=</span> number <span class="op">/</span> <span class="num">10</span>;   <span class="cm">// number = 753</span>
+
+digit  <span class="op">=</span> number <span class="op">%</span> <span class="num">10</span>;   <span class="cm">// digit = 3</span>
+number <span class="op">=</span> number <span class="op">/</span> <span class="num">10</span>;   <span class="cm">// number = 75</span>
+
+digit  <span class="op">=</span> number <span class="op">%</span> <span class="num">10</span>;   <span class="cm">// digit = 5</span>
+number <span class="op">=</span> number <span class="op">/</span> <span class="num">10</span>;   <span class="cm">// number = 7  (last digit remaining)</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Average Age Program (Full Example)</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;iostream.h&gt;</span>
+<span class="kw">main</span>()
+{
+    <span class="kw">int</span> age1, age2, age3;
+    <span class="kw">int</span> totalAge, averageAge;
+
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Enter age of student 1: "</span>; <span class="fn">cin</span> &gt;&gt; age1;
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Enter age of student 2: "</span>; <span class="fn">cin</span> &gt;&gt; age2;
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Enter age of student 3: "</span>; <span class="fn">cin</span> &gt;&gt; age3;
+
+    totalAge   <span class="op">=</span> age1 <span class="op">+</span> age2 <span class="op">+</span> age3;
+    averageAge <span class="op">=</span> totalAge <span class="op">/</span> <span class="num">3</span>;       <span class="cm">// integer division truncates decimal</span>
+
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Average age = "</span> &lt;&lt; averageAge;
+}</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 5 ══════════════ -->
+<div class="lecture" id="lec5">
+  <div class="lecture-header"><span class="lec-num">LEC 05</span><h2>Conditional Statements (if / if-else / Logical Operators)</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">if Statement</div>
+      <div class="topic-def">Executes a block <em class="key">only when the condition is true</em>. Use { } braces to group multiple statements into one block.</div>
+<pre class="code"><span class="kw">if</span> (condition)
+{
+    statement1;
+    statement2;
+}
+
+<span class="cm">// Example: check if student is older</span>
+<span class="kw">if</span> (AmerAge <span class="op">&gt;</span> AmaraAge)
+{
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Amer is older than Amara"</span>;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Relational Operators</div>
+      <div class="topic-def">
+        <span class="pill">&gt;</span> Greater than &nbsp;
+        <span class="pill">&lt;</span> Less than &nbsp;
+        <span class="pill">==</span> Equal to &nbsp;
+        <span class="pill">!=</span> Not equal &nbsp;
+        <span class="pill">&gt;=</span> Greater or equal &nbsp;
+        <span class="pill">&lt;=</span> Less or equal<br><br>
+        ⚠️ <em class="key">==</em> (comparison) is completely different from <em class="key">=</em> (assignment). Writing <code>if (x = 2)</code> instead of <code>if (x == 2)</code> is a silent logical error!
+      </div>
+<pre class="code"><span class="kw">int</span> x <span class="op">=</span> <span class="num">5</span>, y <span class="op">=</span> <span class="num">10</span>;
+
+<span class="kw">if</span> (x <span class="op">==</span> y)  <span class="fn">cout</span> &lt;&lt; <span class="str">"equal"</span>;       <span class="cm">// false</span>
+<span class="kw">if</span> (x <span class="op">!=</span> y)  <span class="fn">cout</span> &lt;&lt; <span class="str">"not equal"</span>;   <span class="cm">// true</span>
+<span class="kw">if</span> (x <span class="op">&lt;</span>  y)  <span class="fn">cout</span> &lt;&lt; <span class="str">"x less"</span>;     <span class="cm">// true</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">if-else Structure</div>
+      <div class="topic-def">Executes one block if true, a <em class="key">different block</em> if false. The else covers ALL cases not matched by the if condition.</div>
+<pre class="code"><span class="kw">if</span> (amount <span class="op">&gt;</span> <span class="num">5000</span>)
+{
+    discount <span class="op">=</span> amount <span class="op">*</span> (<span class="num">15.0</span> <span class="op">/</span> <span class="num">100</span>);   <span class="cm">// 15% discount</span>
+}
+<span class="kw">else</span>
+{
+    discount <span class="op">=</span> amount <span class="op">*</span> (<span class="num">10.0</span> <span class="op">/</span> <span class="num">100</span>);   <span class="cm">// 10% discount</span>
+}
+netPayable <span class="op">=</span> amount <span class="op">-</span> discount;</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Logical Operators</div>
+      <div class="topic-def">
+        <em class="key">&amp;&amp; (AND)</em> — Both conditions must be true for the whole expression to be true.<br>
+        <em class="key">|| (OR)</em>  — At least one condition must be true.<br>
+        <em class="key">!  (NOT)</em> — Reverses the truth value of a condition (unary operator).
+      </div>
+<pre class="code"><span class="cm">// AND: both must be true</span>
+<span class="kw">if</span> (age <span class="op">&gt;</span> <span class="num">18</span> <span class="op">&amp;&amp;</span> height <span class="op">&gt;</span> <span class="num">6</span>)
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Selected for basketball team"</span>;
+
+<span class="cm">// OR: at least one must be true</span>
+<span class="kw">if</span> (degree <span class="op">==</span> <span class="str">'B'</span> <span class="op">||</span> degree <span class="op">==</span> <span class="str">'M'</span>)
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Admitted to university"</span>;
+
+<span class="cm">// NOT: reverses the condition</span>
+<span class="kw">if</span> (<span class="op">!</span>(age <span class="op">&gt;</span> <span class="num">18</span>))
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Age is 18 or below"</span>;</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 6 ══════════════ -->
+<div class="lecture" id="lec6">
+  <div class="lecture-header"><span class="lec-num">LEC 06</span><h2>Repetition Structure – while Loop</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">while Loop</div>
+      <div class="topic-def">Repeats a block <em class="key">as long as a condition is true</em>. Condition is tested <em class="key">before</em> each iteration. May execute <em class="key">zero or more</em> times.</div>
+<pre class="code"><span class="kw">while</span> (condition)
+{
+    statement(s);
+}
+
+<span class="cm">// Example: sum of first 1000 integers</span>
+<span class="kw">int</span> sum <span class="op">=</span> <span class="num">0</span>, number <span class="op">=</span> <span class="num">1</span>;
+
+<span class="kw">while</span> (number <span class="op">&lt;=</span> <span class="num">1000</span>)
+{
+    sum    <span class="op">=</span> sum <span class="op">+</span> number;   <span class="cm">// add current number to sum</span>
+    number <span class="op">=</span> number <span class="op">+</span> <span class="num">1</span>;    <span class="cm">// move to next integer</span>
+}
+<span class="cm">// Result: sum = 500500</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Overflow Condition</div>
+      <div class="topic-def">Occurs when a computed value <em class="key">exceeds the maximum</em> a data type can hold. For <code>int</code> (4 bytes) the max is ~2.1 billion. Overflow causes either a runtime error or a silently wrong (wrapped) value. Use <code>long</code> or <code>double</code> for large numbers.</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Infinite Loop</div>
+      <div class="topic-def">A loop whose condition <em class="key">never becomes false</em>. Always happens when the loop variable is never updated inside the body. Must be avoided.</div>
+<pre class="code"><span class="cm">// WRONG — infinite loop: number never changes</span>
+<span class="kw">while</span> (number <span class="op">&lt;=</span> <span class="num">1000</span>)
+{
+    sum <span class="op">=</span> sum <span class="op">+</span> number;
+    <span class="cm">// number = number + 1;   &lt;-- MISSING! loop runs forever</span>
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Factorial Using while</div>
+<pre class="code"><span class="kw">int</span> number, factorial <span class="op">=</span> <span class="num">1</span>;
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Enter number: "</span>;
+<span class="fn">cin</span>  &gt;&gt; number;
+
+<span class="kw">while</span> (number <span class="op">&gt;</span> <span class="num">1</span>)
+{
+    factorial <span class="op">=</span> factorial <span class="op">*</span> number;
+    number    <span class="op">=</span> number <span class="op">-</span> <span class="num">1</span>;
+}
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Factorial = "</span> &lt;&lt; factorial;</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 7 ══════════════ -->
+<div class="lecture" id="lec7">
+  <div class="lecture-header"><span class="lec-num">LEC 07</span><h2>do-while Loop, for Loop &amp; Increment/Decrement Operators</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">do-while Loop</div>
+      <div class="topic-def">Condition is checked <em class="key">AFTER</em> the body executes. Guarantees the body runs <em class="key">at least once</em>. Used for menus, input validation, guessing games.</div>
+<pre class="code"><span class="kw">do</span>
+{
+    statement(s);
+} <span class="kw">while</span> (condition);   <span class="cm">// note semicolon here!</span>
+
+<span class="cm">// Example: guess a character, 5 tries allowed</span>
+<span class="kw">int</span>  tryNum <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">char</span> c;
+<span class="kw">do</span>
+{
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Guess a character (a-z): "</span>;
+    <span class="fn">cin</span>  &gt;&gt; c;
+    <span class="kw">if</span> (c <span class="op">==</span> <span class="str">'z'</span>)
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Correct!"</span>;
+    <span class="kw">else</span>
+        tryNum<span class="op">++</span>;
+} <span class="kw">while</span> (tryNum <span class="op">&lt;=</span> <span class="num">5</span> <span class="op">&amp;&amp;</span> c <span class="op">!=</span> <span class="str">'z'</span>);</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">for Loop</div>
+      <div class="topic-def">Combines <em class="key">initialization, condition, and increment</em> in one compact line. Best when the number of iterations is known in advance.</div>
+<pre class="code"><span class="kw">for</span> (initialization; condition; increment)
+{
+    statement(s);
+}
+
+<span class="cm">// Example: print multiplication table of 7</span>
+<span class="kw">int</span> counter;
+<span class="kw">for</span> (counter <span class="op">=</span> <span class="num">1</span>; counter <span class="op">&lt;=</span> <span class="num">10</span>; counter<span class="op">++</span>)
+{
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"7 x "</span> &lt;&lt; counter &lt;&lt; <span class="str">" = "</span> &lt;&lt; <span class="num">7</span> <span class="op">*</span> counter &lt;&lt; <span class="str">"\n"</span>;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Increment &amp; Decrement Operators</div>
+      <div class="topic-def">
+        <em class="key">++ (increment)</em> — adds 1 to a variable.<br>
+        <em class="key">-- (decrement)</em> — subtracts 1 from a variable.<br>
+        <em class="key">Pre (++x)</em> — increment FIRST, then use the new value in the expression.<br>
+        <em class="key">Post (x++)</em> — use the current value in the expression, THEN increment.
+      </div>
+<pre class="code"><span class="kw">int</span> j <span class="op">=</span> <span class="num">5</span>, x;
+
+x <span class="op">=</span> <span class="op">++</span>j;   <span class="cm">// pre-increment:  j becomes 6 first, then x = 6</span>
+x <span class="op">=</span> j<span class="op">++</span>;   <span class="cm">// post-increment: x = 6 first, then j becomes 7</span>
+
+<span class="cm">// Compound assignment operators (shorthand):</span>
+x <span class="op">+=</span> <span class="num">4</span>;    <span class="cm">// same as x = x + 4</span>
+x <span class="op">-=</span> <span class="num">3</span>;    <span class="cm">// same as x = x - 3</span>
+x <span class="op">*=</span> <span class="num">2</span>;    <span class="cm">// same as x = x * 2</span>
+x <span class="op">/=</span> <span class="num">2</span>;    <span class="cm">// same as x = x / 2</span>
+x <span class="op">%=</span> <span class="num">3</span>;    <span class="cm">// same as x = x % 3</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Sum of Squares Using for Loop</div>
+<pre class="code"><span class="cm">// Sum = 1² + 2² + 3² + ... + n²</span>
+<span class="kw">int</span> i, n, sum <span class="op">=</span> <span class="num">0</span>;
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Enter n: "</span>;
+<span class="fn">cin</span>  &gt;&gt; n;
+
+<span class="kw">for</span> (i <span class="op">=</span> <span class="num">1</span>; i <span class="op">&lt;=</span> n; i<span class="op">++</span>)
+{
+    sum <span class="op">+=</span> i <span class="op">*</span> i;   <span class="cm">// sum = sum + i²</span>
+}
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Sum of squares = "</span> &lt;&lt; sum;</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 8 ══════════════ -->
+<div class="lecture" id="lec8">
+  <div class="lecture-header"><span class="lec-num">LEC 08</span><h2>switch, break, continue &amp; Structured Programming</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">switch Statement</div>
+      <div class="topic-def">A <em class="key">multi-way decision</em> construct. Evaluates an integer or char variable and jumps directly to the matching case. More efficient than many chained if-else statements. Without <em class="key">break</em>, execution "falls through" to the next case — a common logical error!</div>
+<pre class="code"><span class="kw">switch</span> (grade)
+{
+    <span class="kw">case</span> <span class="str">'A'</span>:
+    <span class="kw">case</span> <span class="str">'a'</span>:                        <span class="cm">// both A and a share same action</span>
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Excellent"</span>;
+        <span class="kw">break</span>;                       <span class="cm">// exit switch — REQUIRED!</span>
+    <span class="kw">case</span> <span class="str">'B'</span>:
+    <span class="kw">case</span> <span class="str">'b'</span>:
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Very Good"</span>;
+        <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'C'</span>:
+    <span class="kw">case</span> <span class="str">'c'</span>:
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Good"</span>;
+        <span class="kw">break</span>;
+    <span class="kw">default</span>:                         <span class="cm">// no case matched</span>
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Invalid grade"</span>;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">break Statement</div>
+      <div class="topic-def">Immediately <em class="key">exits the innermost loop or switch</em>. Used to terminate a loop early when a desired condition is met.</div>
+<pre class="code"><span class="kw">for</span> (i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> <span class="num">100</span>; i<span class="op">++</span>)
+{
+    <span class="kw">if</span> (a[i] <span class="op">==</span> target)
+    {
+        found <span class="op">=</span> <span class="num">1</span>;
+        <span class="kw">break</span>;           <span class="cm">// stop searching as soon as target is found</span>
+    }
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">continue Statement</div>
+      <div class="topic-def">Skips the rest of the current iteration and <em class="key">jumps to the next iteration</em>. In a for loop, the increment expression is still executed before the next check.</div>
+<pre class="code"><span class="cm">// Print only odd numbers from 1 to 10</span>
+<span class="kw">for</span> (i <span class="op">=</span> <span class="num">1</span>; i <span class="op">&lt;=</span> <span class="num">10</span>; i<span class="op">++</span>)
+{
+    <span class="kw">if</span> (i <span class="op">%</span> <span class="num">2</span> <span class="op">==</span> <span class="num">0</span>)
+        <span class="kw">continue</span>;        <span class="cm">// skip even numbers</span>
+    <span class="fn">cout</span> &lt;&lt; i &lt;&lt; <span class="str">" "</span>;
+}
+<span class="cm">// Output: 1 3 5 7 9</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Structured Programming Rules</div>
+      <div class="topic-def">
+        Any program can be written using only three constructs: <em class="key">sequence</em>, <em class="key">decisions</em>, and <em class="key">loops</em>.<br>
+        Every module should have <em class="key">single entry and single exit</em>.<br>
+        <em class="key">Never use goto</em> — it creates unreadable "spaghetti code".<br>
+        Minimize use of break and continue inside loops.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 9 ══════════════ -->
+<div class="lecture" id="lec9">
+  <div class="lecture-header"><span class="lec-num">LEC 09</span><h2>Functions</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">What is a Function?</div>
+      <div class="topic-def">A <em class="key">named, reusable block of code</em> that performs a specific task. Receives input (arguments), processes, and returns a result. Enables top-down design and code reuse.</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Function Structure: Declaration &amp; Definition</div>
+<pre class="code"><span class="cm">// Declaration (prototype) — tells compiler about the function</span>
+<span class="kw">int</span> <span class="fn">square</span>(<span class="kw">int</span>);               <span class="cm">// return type, name, param types only</span>
+
+<span class="cm">// Definition — actual code with parameter names</span>
+<span class="kw">int</span> <span class="fn">square</span>(<span class="kw">int</span> number)
+{
+    <span class="kw">int</span> result <span class="op">=</span> number <span class="op">*</span> number;
+    <span class="kw">return</span> result;              <span class="cm">// return exits function and sends back the value</span>
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Calling a Function</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;iostream.h&gt;</span>
+<span class="kw">int</span> <span class="fn">square</span>(<span class="kw">int</span>);             <span class="cm">// prototype must appear before use</span>
+
+<span class="kw">main</span>()
+{
+    <span class="kw">int</span> num <span class="op">=</span> <span class="num">5</span>, result;
+    result <span class="op">=</span> <span class="fn">square</span>(num);     <span class="cm">// function call — passes copy of num</span>
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Square = "</span> &lt;&lt; result;   <span class="cm">// prints 25</span>
+}
+
+<span class="kw">int</span> <span class="fn">square</span>(<span class="kw">int</span> number)       <span class="cm">// definition</span>
+{
+    <span class="kw">return</span> number <span class="op">*</span> number;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Call by Value (Default)</div>
+      <div class="topic-def">A <em class="key">copy</em> of the argument is passed to the function. The original variable in the calling program is <em class="key">NOT changed</em>. Safe — no side effects on caller's data.</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">void Functions (No Return Value)</div>
+<pre class="code"><span class="kw">void</span> <span class="fn">printLine</span>()          <span class="cm">// void = no return value</span>
+{
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"--------------------\n"</span>;
+}                           <span class="cm">// no return statement needed</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Recursive Function</div>
+      <div class="topic-def">A function that <em class="key">calls itself</em>. Must have a <em class="key">base case</em> to stop recursion. Elegant but uses extra memory for each call on the stack.</div>
+<pre class="code"><span class="kw">long</span> <span class="fn">factorial</span>(<span class="kw">long</span> n)
+{
+    <span class="kw">if</span> (n <span class="op">&lt;=</span> <span class="num">1</span>)
+        <span class="kw">return</span> <span class="num">1</span>;                       <span class="cm">// base case: stop recursion</span>
+    <span class="kw">return</span> n <span class="op">*</span> <span class="fn">factorial</span>(n <span class="op">-</span> <span class="num">1</span>);       <span class="cm">// recursive case</span>
+}
+<span class="cm">// factorial(4) = 4 * factorial(3) = 4 * 3 * 2 * 1 = 24</span></pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 10 ══════════════ -->
+<div class="lecture" id="lec10">
+  <div class="lecture-header"><span class="lec-num">LEC 10</span><h2>Header Files, Scope of Identifiers &amp; Call by Reference</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">Header Files</div>
+      <div class="topic-def">A <em class="key">text file (.h extension)</em> containing function prototypes and constant definitions. Included with <code>#include</code>. Avoids rewriting declarations in every file.</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;iostream.h&gt;</span>    <span class="cm">// system header (angle brackets)</span>
+<span class="pp">#include</span> <span class="str">"myFunctions.h"</span> <span class="cm">// user-made header (double quotes)</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">#define — Named Constants</div>
+      <div class="topic-def">Associates a name with a value. Before compilation, every occurrence of the name is <em class="key">replaced</em> by the value. It is NOT a variable — you cannot assign to it.</div>
+<pre class="code"><span class="pp">#define</span> PI   3.1415926
+<span class="pp">#define</span> MAX  100
+
+<span class="cm">// Usage in code:</span>
+circumference <span class="op">=</span> <span class="num">2</span> <span class="op">*</span> PI <span class="op">*</span> radius;   <span class="cm">// compiler replaces PI with 3.1415926</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Scope of Variables</div>
+      <div class="topic-def">
+        <em class="key">Block scope</em> — Declared inside { }; visible only within that block.<br>
+        <em class="key">Function scope</em> — Declared inside a function; not visible in other functions.<br>
+        <em class="key">Global scope</em> — Declared outside all functions; visible everywhere in the file. Use sparingly — global variables can be accidentally changed by any function.
+      </div>
+<pre class="code"><span class="kw">int</span> globalVar <span class="op">=</span> <span class="num">10</span>;          <span class="cm">// global — visible in all functions below</span>
+
+<span class="kw">void</span> <span class="fn">funcA</span>()
+{
+    <span class="kw">int</span> localVar <span class="op">=</span> <span class="num">5</span>;         <span class="cm">// local — only visible inside funcA</span>
+    globalVar <span class="op">=</span> <span class="num">20</span>;           <span class="cm">// OK: accessing global variable</span>
+}
+
+<span class="kw">void</span> <span class="fn">funcB</span>()
+{
+    <span class="cm">// localVar not accessible here — it's local to funcA</span>
+    globalVar <span class="op">=</span> <span class="num">30</span>;           <span class="cm">// OK: global still accessible</span>
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Call by Reference (using Pointers)</div>
+      <div class="topic-def">Passes the <em class="key">memory address</em> (&amp;) of a variable. The called function modifies the <em class="key">original variable</em> directly. Used when a function must change the caller's data.</div>
+<pre class="code"><span class="kw">void</span> <span class="fn">doubleIt</span>(<span class="kw">int</span> <span class="op">*</span>n)      <span class="cm">// receives address of n</span>
+{
+    <span class="op">*</span>n <span class="op">=</span> <span class="op">*</span>n <span class="op">*</span> <span class="num">2</span>;            <span class="cm">// modifies the ORIGINAL variable</span>
+}
+
+<span class="kw">main</span>()
+{
+    <span class="kw">int</span> x <span class="op">=</span> <span class="num">5</span>;
+    <span class="fn">doubleIt</span>(<span class="op">&amp;</span>x);            <span class="cm">// pass address of x</span>
+    <span class="fn">cout</span> &lt;&lt; x;               <span class="cm">// prints 10</span>
+}</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 11 ══════════════ -->
+<div class="lecture" id="lec11">
+  <div class="lecture-header"><span class="lec-num">LEC 11</span><h2>Arrays</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">What is an Array?</div>
+      <div class="topic-def">A data structure storing a <em class="key">fixed collection of same-type elements</em> in <em class="key">contiguous memory</em>. Accessed by an index (subscript). Useful when many values of the same kind are needed (e.g. 100 student ages).</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Declaration, Indexing &amp; Access</div>
+      <div class="topic-def">Index <em class="key">starts at 0</em>, ends at size−1. Declaration reserves memory; each element is used like a simple variable.</div>
+<pre class="code"><span class="kw">int</span> age[<span class="num">5</span>];          <span class="cm">// declares 5 integers: age[0]..age[4]</span>
+
+age[<span class="num">0</span>] <span class="op">=</span> <span class="num">20</span>;         <span class="cm">// assign first element</span>
+age[<span class="num">4</span>] <span class="op">=</span> <span class="num">25</span>;         <span class="cm">// assign last element</span>
+<span class="fn">cout</span> &lt;&lt; age[<span class="num">2</span>];       <span class="cm">// print third element</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Initialization</div>
+<pre class="code"><span class="kw">int</span> age[<span class="num">5</span>] <span class="op">=</span> {<span class="num">12</span>, <span class="num">13</span>, <span class="num">16</span>, <span class="num">13</span>, <span class="num">14</span>};   <span class="cm">// explicit values</span>
+<span class="kw">int</span> age[]  <span class="op">=</span> {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>};             <span class="cm">// compiler sets size = 3</span>
+<span class="kw">int</span> age[<span class="num">5</span>] <span class="op">=</span> {<span class="num">0</span>};                       <span class="cm">// all elements set to 0</span>
+
+<span class="cm">// Using a loop (best for large arrays):</span>
+<span class="kw">for</span> (i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> <span class="num">5</span>; i<span class="op">++</span>)
+    age[i] <span class="op">=</span> <span class="num">0</span>;</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Processing Arrays with Loops</div>
+<pre class="code"><span class="cm">// Input ages, then compute average</span>
+<span class="kw">const</span> <span class="kw">int</span> SIZE <span class="op">=</span> <span class="num">10</span>;
+<span class="kw">int</span> age[SIZE], i, total <span class="op">=</span> <span class="num">0</span>;
+
+<span class="kw">for</span> (i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> SIZE; i<span class="op">++</span>)
+{
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Enter age "</span> &lt;&lt; (i <span class="op">+</span> <span class="num">1</span>) &lt;&lt; <span class="str">": "</span>;
+    <span class="fn">cin</span>  &gt;&gt; age[i];
+}
+<span class="kw">for</span> (i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> SIZE; i<span class="op">++</span>)
+    total <span class="op">+=</span> age[i];
+
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Average = "</span> &lt;&lt; total <span class="op">/</span> SIZE;</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Linear Search</div>
+<pre class="code"><span class="kw">int</span> target, found <span class="op">=</span> <span class="num">0</span>, pos <span class="op">=</span> <span class="num">-1</span>;
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Enter number to find: "</span>; <span class="fn">cin</span> &gt;&gt; target;
+
+<span class="kw">for</span> (i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> SIZE; i<span class="op">++</span>)
+{
+    <span class="kw">if</span> (a[i] <span class="op">==</span> target)
+    {
+        found <span class="op">=</span> <span class="num">1</span>; pos <span class="op">=</span> i;
+        <span class="kw">break</span>;                <span class="cm">// stop once found</span>
+    }
+}
+<span class="kw">if</span> (found) <span class="fn">cout</span> &lt;&lt; <span class="str">"Found at index "</span> &lt;&lt; pos;
+<span class="kw">else</span>       <span class="fn">cout</span> &lt;&lt; <span class="str">"Not found"</span>;</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">const for Array Size (Best Practice)</div>
+<pre class="code"><span class="kw">const</span> <span class="kw">int</span> ARRAY_SIZE <span class="op">=</span> <span class="num">100</span>;
+<span class="kw">int</span> scores[ARRAY_SIZE];
+
+<span class="kw">for</span> (i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> ARRAY_SIZE; i<span class="op">++</span>)
+    scores[i] <span class="op">=</span> <span class="num">0</span>;
+<span class="cm">// If size changes, update ONLY the const declaration — code stays valid</span></pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 12 ══════════════ -->
+<div class="lecture" id="lec12">
+  <div class="lecture-header"><span class="lec-num">LEC 12</span><h2>Character Arrays, Sorting, Searching &amp; 2D Arrays</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">Character Arrays (Strings)</div>
+      <div class="topic-def">A string in C is a <em class="key">char array terminated by '\0'</em> (null character). The null marks the end of the string. Array size must be at least (number of characters + 1).</div>
+<pre class="code"><span class="kw">char</span> name[<span class="num">100</span>];                     <span class="cm">// can hold up to 99 chars + '\0'</span>
+<span class="fn">cin</span>  &gt;&gt; name;                        <span class="cm">// reads one word (stops at space)</span>
+<span class="fn">cout</span> &lt;&lt; name;                        <span class="cm">// prints until '\0' is reached</span>
+
+<span class="cm">// Initialization:</span>
+<span class="kw">char</span> city[] <span class="op">=</span> <span class="str">"Lahore"</span>;             <span class="cm">// compiler appends '\0' automatically</span>
+<span class="cm">// Equivalent to: {'L','a','h','o','r','e','\0'}</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Arrays Passed to Functions = Automatic Call by Reference</div>
+      <div class="topic-def">The array name holds the <em class="key">address of its first element</em>. Passing an array to a function passes this address, so the function modifies the <em class="key">original array</em> — NOT a copy.</div>
+<pre class="code"><span class="kw">void</span> <span class="fn">fillArray</span>(<span class="kw">int</span> arr[], <span class="kw">int</span> size)  <span class="cm">// receives address of arr[0]</span>
+{
+    <span class="kw">for</span> (<span class="kw">int</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> size; i<span class="op">++</span>)
+        arr[i] <span class="op">=</span> i <span class="op">*</span> <span class="num">10</span>;            <span class="cm">// changes the ORIGINAL array</span>
+}
+
+<span class="kw">main</span>()
+{
+    <span class="kw">int</span> nums[<span class="num">5</span>];
+    <span class="fn">fillArray</span>(nums, <span class="num">5</span>);
+    <span class="fn">cout</span> &lt;&lt; nums[<span class="num">2</span>];               <span class="cm">// prints 20 — original was changed</span>
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Swapping Two Values</div>
+<pre class="code"><span class="kw">int</span> a <span class="op">=</span> <span class="num">5</span>, b <span class="op">=</span> <span class="num">10</span>, temp;
+temp <span class="op">=</span> a;    <span class="cm">// save a</span>
+a    <span class="op">=</span> b;    <span class="cm">// overwrite a with b</span>
+b    <span class="op">=</span> temp; <span class="cm">// give saved value to b</span>
+<span class="cm">// Now a = 10, b = 5</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Binary Search (on Sorted Arrays)</div>
+      <div class="topic-def">Divides the search space in half each step. Works <em class="key">only on sorted arrays</em>. Maximum iterations = log₂(n). For 1000 elements: ≤ 10 comparisons vs 1000 for linear search.</div>
+<pre class="code"><span class="kw">int</span> low <span class="op">=</span> <span class="num">0</span>, high <span class="op">=</span> SIZE <span class="op">-</span> <span class="num">1</span>, mid, target;
+<span class="fn">cin</span> &gt;&gt; target;
+
+<span class="kw">while</span> (low <span class="op">&lt;=</span> high)
+{
+    mid <span class="op">=</span> (low <span class="op">+</span> high) <span class="op">/</span> <span class="num">2</span>;
+    <span class="kw">if</span> (a[mid] <span class="op">==</span> target) { <span class="fn">cout</span> &lt;&lt; <span class="str">"Found at "</span> &lt;&lt; mid; <span class="kw">break</span>; }
+    <span class="kw">else if</span> (target <span class="op">&gt;</span> a[mid]) low  <span class="op">=</span> mid <span class="op">+</span> <span class="num">1</span>; <span class="cm">// search right half</span>
+    <span class="kw">else</span>                       high <span class="op">=</span> mid <span class="op">-</span> <span class="num">1</span>; <span class="cm">// search left half</span>
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">2D Arrays (Matrices)</div>
+<pre class="code"><span class="kw">int</span> matrix[<span class="num">2</span>][<span class="num">3</span>];             <span class="cm">// 2 rows, 3 columns</span>
+<span class="kw">int</span> row, col;
+
+<span class="cm">// Fill with nested loops:</span>
+<span class="kw">for</span> (row <span class="op">=</span> <span class="num">0</span>; row <span class="op">&lt;</span> <span class="num">2</span>; row<span class="op">++</span>)
+    <span class="kw">for</span> (col <span class="op">=</span> <span class="num">0</span>; col <span class="op">&lt;</span> <span class="num">3</span>; col<span class="op">++</span>)
+    {
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Enter ["</span> &lt;&lt; row &lt;&lt; <span class="str">"]["</span> &lt;&lt; col &lt;&lt; <span class="str">"]:"</span>;
+        <span class="fn">cin</span>  &gt;&gt; matrix[row][col];
+    }
+
+matrix[<span class="num">1</span>][<span class="num">2</span>] <span class="op">=</span> <span class="num">99</span>;              <span class="cm">// access row 1, column 2</span></pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 13 ══════════════ -->
+<div class="lecture" id="lec13">
+  <div class="lecture-header"><span class="lec-num">LEC 13</span><h2>Array Manipulation &amp; Real-World Problem Design</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">Flipping a Matrix (Reverse Row Order)</div>
+      <div class="topic-def">Display rows bottom-to-top by running the outer loop from <em class="key">maxRows−1 down to 0</em>. The actual array data is not changed — only the display order.</div>
+<pre class="code"><span class="cm">// Display matrix with rows in reverse order</span>
+<span class="kw">for</span> (row <span class="op">=</span> maxRows <span class="op">-</span> <span class="num">1</span>; row <span class="op">&gt;=</span> <span class="num">0</span>; row<span class="op">--</span>)
+{
+    <span class="kw">for</span> (col <span class="op">=</span> <span class="num">0</span>; col <span class="op">&lt;</span> maxCols; col<span class="op">++</span>)
+        <span class="fn">cout</span> &lt;&lt; a[row][col] &lt;&lt; <span class="str">"\t"</span>;
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"\n"</span>;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Transpose of a Square Matrix</div>
+      <div class="topic-def">Swap element [i][j] with [j][i]. To avoid double-swapping, iterate only over the <em class="key">upper triangle</em>: start inner loop at col = row (not 0).</div>
+<pre class="code"><span class="kw">int</span> temp;
+<span class="kw">for</span> (row <span class="op">=</span> <span class="num">0</span>; row <span class="op">&lt;</span> SIZE; row<span class="op">++</span>)
+{
+    <span class="kw">for</span> (col <span class="op">=</span> row; col <span class="op">&lt;</span> SIZE; col<span class="op">++</span>)   <span class="cm">// col starts at row, NOT 0</span>
+    {
+        temp        <span class="op">=</span> a[row][col];
+        a[row][col] <span class="op">=</span> a[col][row];
+        a[col][row] <span class="op">=</span> temp;
+    }
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Design Recipe for Real-World Problems</div>
+      <div class="topic-def">
+        1. <em class="key">Precise problem statement</em> — state exactly what must be solved.<br>
+        2. <em class="key">Identify inputs, outputs, constants</em> — what data is needed?<br>
+        3. <em class="key">Break into functions</em> — getInput(), calcNetSal(), findUnluckies(), printResults().<br>
+        4. <em class="key">Code and test each function</em> separately before integrating.
+      </div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">2D Array for Salary Data</div>
+<pre class="code"><span class="kw">double</span> sal[<span class="num">100</span>][<span class="num">2</span>];    <span class="cm">// sal[i][0] = gross salary</span>
+                        <span class="cm">// sal[i][1] = net salary after tax</span>
+
+<span class="cm">// Calculate net salary based on tax brackets:</span>
+<span class="kw">for</span> (<span class="kw">int</span> i <span class="op">=</span> <span class="num">0</span>; i <span class="op">&lt;</span> numEmps; i<span class="op">++</span>)
+{
+    <span class="kw">if</span> (sal[i][<span class="num">0</span>] <span class="op">&lt;=</span> <span class="num">5000</span>)
+        sal[i][<span class="num">1</span>] <span class="op">=</span> sal[i][<span class="num">0</span>];                    <span class="cm">// 0% tax</span>
+    <span class="kw">else if</span> (sal[i][<span class="num">0</span>] <span class="op">&lt;=</span> <span class="num">10000</span>)
+        sal[i][<span class="num">1</span>] <span class="op">=</span> sal[i][<span class="num">0</span>] <span class="op">-</span> sal[i][<span class="num">0</span>] <span class="op">*</span> <span class="num">0.05</span>;  <span class="cm">// 5% tax</span>
+    <span class="kw">else</span>
+        sal[i][<span class="num">1</span>] <span class="op">=</span> sal[i][<span class="num">0</span>] <span class="op">-</span> sal[i][<span class="num">0</span>] <span class="op">*</span> <span class="num">0.10</span>;  <span class="cm">// 10% tax</span>
+}</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 14 ══════════════ -->
+<div class="lecture" id="lec14">
+  <div class="lecture-header"><span class="lec-num">LEC 14</span><h2>Pointers</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">What is a Pointer?</div>
+      <div class="topic-def">A variable that stores a <em class="key">memory address</em> (not a value). Provides <em class="key">indirect access</em> to data — the pointer "points to" the memory location where the data lives.</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Declaring Pointers</div>
+      <div class="topic-def">Syntax: <code>datatype *pointerName;</code> — The * is attached to the variable name, not the type. Each pointer in a declaration needs its own *.</div>
+<pre class="code"><span class="kw">int</span>    <span class="op">*</span>ptr;     <span class="cm">// ptr is a pointer to int</span>
+<span class="kw">double</span> <span class="op">*</span>dptr;    <span class="cm">// dptr is a pointer to double</span>
+<span class="kw">char</span>   <span class="op">*</span>cptr;    <span class="cm">// cptr is a pointer to char</span>
+
+<span class="kw">int</span> <span class="op">*</span>p1, <span class="op">*</span>p2, <span class="op">*</span>p3;  <span class="cm">// three int pointers in one line</span>
+<span class="kw">int</span> <span class="op">*</span>p, x, arr[<span class="num">5</span>];  <span class="cm">// p = pointer, x = int, arr = array</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Address Operator (&amp;) &amp; Dereference Operator (*)</div>
+<pre class="code"><span class="kw">int</span> x <span class="op">=</span> <span class="num">10</span>;
+<span class="kw">int</span> <span class="op">*</span>ptr;
+
+ptr <span class="op">=</span> <span class="op">&amp;</span>x;         <span class="cm">// &amp;x = address of x; now ptr points to x</span>
+
+<span class="fn">cout</span> &lt;&lt; ptr;      <span class="cm">// prints the memory address (e.g. 0x22ff7c)</span>
+<span class="fn">cout</span> &lt;&lt; <span class="op">*</span>ptr;     <span class="cm">// dereference: prints 10 (value stored at that address)</span>
+
+(<span class="op">*</span>ptr)<span class="op">++</span>;          <span class="cm">// increment the VALUE at the address: x becomes 11</span>
+<span class="fn">cout</span> &lt;&lt; x;        <span class="cm">// prints 11 — original variable was changed!</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">NULL Pointer (Safe Initialization)</div>
+<pre class="code"><span class="kw">int</span> <span class="op">*</span>ptr <span class="op">=</span> NULL;    <span class="cm">// points to nothing — safe initial state</span>
+<span class="cm">// OR:</span>
+<span class="kw">int</span> <span class="op">*</span>ptr <span class="op">=</span> <span class="num">0</span>;       <span class="cm">// 0 is not a valid address, means "no target"</span>
+
+<span class="cm">// Always assign a valid address before dereferencing:</span>
+ptr <span class="op">=</span> <span class="op">&amp;</span>x;
+<span class="op">*</span>ptr <span class="op">=</span> <span class="num">50</span>;           <span class="cm">// now safe — ptr points to x</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">swap() Using Pointers (Call by Reference)</div>
+<pre class="code"><span class="kw">void</span> <span class="fn">swap</span>(<span class="kw">int</span> <span class="op">*</span>x, <span class="kw">int</span> <span class="op">*</span>y)   <span class="cm">// receives addresses of two variables</span>
+{
+    <span class="kw">int</span> temp <span class="op">=</span> <span class="op">*</span>x;            <span class="cm">// save value at address x</span>
+    <span class="op">*</span>x <span class="op">=</span> <span class="op">*</span>y;                  <span class="cm">// put value of y into x's location</span>
+    <span class="op">*</span>y <span class="op">=</span> temp;                <span class="cm">// put saved value into y's location</span>
+}
+
+<span class="kw">main</span>()
+{
+    <span class="kw">int</span> a <span class="op">=</span> <span class="num">5</span>, b <span class="op">=</span> <span class="num">10</span>;
+    <span class="fn">swap</span>(<span class="op">&amp;</span>a, <span class="op">&amp;</span>b);             <span class="cm">// pass addresses</span>
+    <span class="fn">cout</span> &lt;&lt; a &lt;&lt; <span class="str">" "</span> &lt;&lt; b;    <span class="cm">// prints: 10 5</span>
+}</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 15 ══════════════ -->
+<div class="lecture" id="lec15">
+  <div class="lecture-header"><span class="lec-num">LEC 15</span><h2>Pointer Arithmetic &amp; Pointers with Arrays/Strings</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">Array Name = Constant Pointer</div>
+      <div class="topic-def">The name of an array <em class="key">IS a constant pointer</em> to the address of its first element. It cannot be reassigned. A normal pointer variable can be assigned the array's address and then moved freely.</div>
+<pre class="code"><span class="kw">int</span> y[<span class="num">10</span>];
+<span class="kw">int</span> <span class="op">*</span>yptr;
+
+yptr <span class="op">=</span> y;            <span class="cm">// yptr now points to y[0]</span>
+<span class="cm">// y = yptr;  ERROR! array name is a constant pointer — cannot reassign</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Pointer Arithmetic — Increment / Decrement</div>
+      <div class="topic-def">When a pointer is incremented, it advances by the <em class="key">size of its data type in bytes</em>, not by 1. For an int pointer (4 bytes): ptr++ adds 4 to the address.</div>
+<pre class="code"><span class="kw">int</span> y[<span class="num">5</span>] <span class="op">=</span> {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>};
+<span class="kw">int</span> <span class="op">*</span>p <span class="op">=</span> y;           <span class="cm">// p points to y[0]</span>
+
+<span class="fn">cout</span> &lt;&lt; <span class="op">*</span>p;           <span class="cm">// 10</span>
+p<span class="op">++</span>;                  <span class="cm">// p now points to y[1] (address +4 bytes)</span>
+<span class="fn">cout</span> &lt;&lt; <span class="op">*</span>p;           <span class="cm">// 20</span>
+
+<span class="cm">// Three equivalent ways to access y[5]'s element at index 3:</span>
+<span class="fn">cout</span> &lt;&lt; y[<span class="num">3</span>];          <span class="cm">// array indexing</span>
+<span class="fn">cout</span> &lt;&lt; <span class="op">*</span>(y <span class="op">+</span> <span class="num">3</span>);     <span class="cm">// pointer arithmetic on array name</span>
+<span class="fn">cout</span> &lt;&lt; p[<span class="num">2</span>];          <span class="cm">// indexing a pointer variable</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Pointer Subtraction</div>
+      <div class="topic-def">Subtracting two pointers of the same type gives <em class="key">how many elements apart</em> they are. Addition of two pointers is NOT allowed.</div>
+<pre class="code"><span class="kw">int</span> arr[<span class="num">10</span>];
+<span class="kw">int</span> <span class="op">*</span>p1 <span class="op">=</span> <span class="op">&amp;</span>arr[<span class="num">0</span>];   <span class="cm">// points to element 0</span>
+<span class="kw">int</span> <span class="op">*</span>p2 <span class="op">=</span> <span class="op">&amp;</span>arr[<span class="num">3</span>];   <span class="cm">// points to element 3</span>
+
+<span class="fn">cout</span> &lt;&lt; (p2 <span class="op">-</span> p1);   <span class="cm">// prints 3 (three elements apart)</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Traversing a String with a Pointer</div>
+<pre class="code"><span class="kw">char</span> str[] <span class="op">=</span> <span class="str">"Hello"</span>;
+<span class="kw">char</span> <span class="op">*</span>sptr <span class="op">=</span> str;          <span class="cm">// points to 'H'</span>
+
+<span class="kw">while</span> (<span class="op">*</span>sptr <span class="op">!=</span> <span class="str">'\0'</span>)      <span class="cm">// loop until null terminator</span>
+{
+    <span class="fn">cout</span> &lt;&lt; <span class="op">*</span>sptr;          <span class="cm">// print current character</span>
+    sptr<span class="op">++</span>;                  <span class="cm">// advance to next character</span>
+}
+<span class="cm">// Output: Hello</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">const with Pointers</div>
+<pre class="code"><span class="kw">const</span> <span class="kw">int</span> <span class="op">*</span>ptr <span class="op">=</span> <span class="op">&amp;</span>x;  <span class="cm">// pointer to const int</span>
+                        <span class="cm">// value at address cannot change via ptr</span>
+                        <span class="cm">// but ptr itself can point elsewhere</span>
+
+<span class="kw">int</span> <span class="op">*</span><span class="kw">const</span> ptr <span class="op">=</span> <span class="op">&amp;</span>x;  <span class="cm">// const pointer to int</span>
+                        <span class="cm">// ptr always points to x (cannot reassign ptr)</span>
+                        <span class="cm">// but value at x can change</span></pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 16 ══════════════ -->
+<div class="lecture" id="lec16">
+  <div class="lecture-header"><span class="lec-num">LEC 16</span><h2>Pointers to Pointers, Arrays of Pointers &amp; Command-line Arguments</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">Pointer to Pointer (Double Indirection)</div>
+      <div class="topic-def">A pointer that stores the <em class="key">address of another pointer</em>. Written as <code>**ptr</code>. Used for 2D arrays, arrays of strings, and dynamic allocation.</div>
+<pre class="code"><span class="kw">int</span>   x   <span class="op">=</span> <span class="num">42</span>;
+<span class="kw">int</span>  <span class="op">*</span>p   <span class="op">=</span> <span class="op">&amp;</span>x;    <span class="cm">// p  holds address of x</span>
+<span class="kw">int</span> <span class="op">**</span>pp  <span class="op">=</span> <span class="op">&amp;</span>p;    <span class="cm">// pp holds address of p</span>
+
+<span class="fn">cout</span> &lt;&lt; <span class="op">**</span>pp;      <span class="cm">// 42 — double dereference: pp->p->x</span>
+
+<span class="cm">// Accessing 2D array element using pointer notation:</span>
+<span class="kw">int</span> multi[<span class="num">3</span>][<span class="num">3</span>];
+<span class="cm">// multi[2][1] is the same as:</span>
+<span class="op">*</span>(<span class="op">*</span>(multi <span class="op">+</span> <span class="num">2</span>) <span class="op">+</span> <span class="num">1</span>)    <span class="cm">// row 2, col 1</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Array of Pointers — Variable-Length Strings</div>
+      <div class="topic-def">Instead of a fixed 2D char array (wastes space), use an <em class="key">array of char pointers</em>. Each pointer points to a string of its own length — no wasted memory.</div>
+<pre class="code"><span class="cm">// Fixed 2D array wastes space (each row is 20 chars wide):</span>
+<span class="kw">char</span> names[<span class="num">3</span>][<span class="num">20</span>] <span class="op">=</span> {<span class="str">"Ali"</span>, <span class="str">"Jehangir"</span>, <span class="str">"Muhammad Usman"</span>};
+
+<span class="cm">// Array of pointers — uses only what each string needs:</span>
+<span class="kw">char</span> <span class="op">*</span>names[] <span class="op">=</span> {<span class="str">"Ali"</span>, <span class="str">"Jehangir"</span>, <span class="str">"Muhammad Usman"</span>};
+<span class="cm">// names[0] -> 4 bytes, names[1] -> 9 bytes, names[2] -> 15 bytes</span>
+
+<span class="fn">cout</span> &lt;&lt; names[<span class="num">1</span>];   <span class="cm">// prints "Jehangir"</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Command-line Arguments (argc &amp; argv)</div>
+      <div class="topic-def"><em class="key">argc</em> — integer count of command-line arguments (program name counts as #1).<br>
+      <em class="key">argv</em> — array of strings (char**); each argument is a character string.</div>
+<pre class="code"><span class="kw">void</span> <span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> <span class="op">**</span>argv)
+{
+    <span class="cm">// Running:  myProgram.exe  10  display</span>
+    <span class="cm">// argc = 3</span>
+    <span class="cm">// argv[0] = "myProgram.exe"</span>
+    <span class="cm">// argv[1] = "10"</span>
+    <span class="cm">// argv[2] = "display"</span>
+
+    <span class="kw">if</span> (argc <span class="op">&lt;</span> <span class="num">2</span>)
+    {
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Please provide arguments"</span>;
+        <span class="kw">return</span>;
+    }
+    <span class="kw">int</span> count <span class="op">=</span> <span class="fn">atoi</span>(argv[<span class="num">1</span>]);    <span class="cm">// convert "10" string to integer 10</span>
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Count = "</span> &lt;&lt; count;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">2D Array Name Pointer Behaviour</div>
+      <div class="topic-def">Adding 1 to a 2D array name skips an entire <em class="key">row</em> (all columns), because the compiler knows the row width = columns × element size.</div>
+<pre class="code"><span class="kw">char</span> grid[<span class="num">5</span>][<span class="num">10</span>];
+
+<span class="cm">// grid       points to row 0 (address of grid[0][0])</span>
+<span class="cm">// grid + 1   points to row 1 (jumps 10 bytes for 10 chars)</span>
+<span class="cm">// grid + 2   points to row 2</span>
+<span class="cm">// *grid      is address of first element of row 0</span>
+<span class="cm">// **grid     is the value of grid[0][0]</span></pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 17 ══════════════ -->
+<div class="lecture" id="lec17">
+  <div class="lecture-header"><span class="lec-num">LEC 17</span><h2>String Handling — &lt;ctype.h&gt;, &lt;string.h&gt;, &lt;stdlib.h&gt;</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">ASCII Codes &amp; Characters</div>
+      <div class="topic-def">Every character is stored internally as a number (ASCII code). 'A'–'Z' = 65–90, 'a'–'z' = 97–122, '0'–'9' = 48–57. C is <em class="key">case-sensitive</em>: 'A' ≠ 'a'.</div>
+<pre class="code"><span class="kw">char</span> c <span class="op">=</span> <span class="str">'A'</span>;
+<span class="kw">int</span>  n <span class="op">=</span> c;           <span class="cm">// n = 65  (ASCII value of 'A')</span>
+<span class="fn">cout</span> &lt;&lt; (c <span class="op">+</span> <span class="num">1</span>);      <span class="cm">// prints 66 (numeric) — NOT 'B'</span>
+<span class="fn">cout</span> &lt;&lt; (<span class="kw">char</span>)(c <span class="op">+</span> <span class="num">1</span>); <span class="cm">// prints 'B' (cast back to char)</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Character Test Functions — &lt;ctype.h&gt;</div>
+      <div class="topic-def">All return non-zero (true) or 0 (false). Include <code>#include &lt;ctype.h&gt;</code>.</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;ctype.h&gt;</span>
+
+<span class="kw">char</span> c <span class="op">=</span> <span class="str">'G'</span>;
+<span class="fn">isdigit</span>(c)   <span class="cm">// 0 (false)  — is it a digit 0-9?</span>
+<span class="fn">isalpha</span>(c)   <span class="cm">// true       — is it a letter a-z or A-Z?</span>
+<span class="fn">isupper</span>(c)   <span class="cm">// true       — is it uppercase?</span>
+<span class="fn">islower</span>(c)   <span class="cm">// 0 (false)  — is it lowercase?</span>
+<span class="fn">isspace</span>(c)   <span class="cm">// 0 (false)  — is it whitespace (' ', '\n', '\t')?</span>
+<span class="fn">ispunct</span>(c)   <span class="cm">// 0 (false)  — is it punctuation (!, ., ,)?</span>
+<span class="fn">isalnum</span>(c)   <span class="cm">// true       — is it a letter OR digit?</span>
+
+<span class="cm">// Conversion functions:</span>
+<span class="fn">tolower</span>(<span class="str">'G'</span>)  <span class="cm">// returns 'g'</span>
+<span class="fn">toupper</span>(<span class="str">'g'</span>)  <span class="cm">// returns 'G'</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">String Conversion Functions — &lt;stdlib.h&gt;</div>
+      <div class="topic-def">Convert string representations of numbers to numeric types. Useful when reading command-line arguments (which always arrive as strings).</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="kw">char</span> buf[] <span class="op">=</span> <span class="str">"42"</span>;
+<span class="kw">int</span>    n <span class="op">=</span> <span class="fn">atoi</span>(buf);    <span class="cm">// "42"  -> 42   (string to int)</span>
+<span class="kw">double</span> d <span class="op">=</span> <span class="fn">atof</span>(<span class="str">"3.14"</span>); <span class="cm">// "3.14"-> 3.14 (string to double)</span>
+<span class="kw">long</span>   l <span class="op">=</span> <span class="fn">atol</span>(<span class="str">"9999"</span>); <span class="cm">// "9999"-> 9999 (string to long)</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">String Functions — &lt;string.h&gt;</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;string.h&gt;</span>
+
+<span class="kw">char</span> s1[<span class="num">50</span>] <span class="op">=</span> <span class="str">"Hello"</span>;
+<span class="kw">char</span> s2[]   <span class="op">=</span> <span class="str">" World"</span>;
+
+<span class="fn">strlen</span>(s1);            <span class="cm">// 5  — length (not counting '\0')</span>
+<span class="fn">strcpy</span>(s1, <span class="str">"Bye"</span>);      <span class="cm">// s1 becomes "Bye" (copy entire string)</span>
+<span class="fn">strncpy</span>(s1, s2, <span class="num">3</span>);    <span class="cm">// copies first 3 chars of s2 into s1</span>
+<span class="fn">strcat</span>(s1, s2);        <span class="cm">// s1 = "Hello World" (append s2 to s1)</span>
+<span class="fn">strncat</span>(s1, s2, <span class="num">3</span>);   <span class="cm">// append only 3 chars of s2</span>
+
+<span class="cm">// strcmp: returns 0 if equal, negative if s1 &lt; s2, positive if s1 &gt; s2</span>
+<span class="kw">if</span> (<span class="fn">strcmp</span>(s1, s2) <span class="op">==</span> <span class="num">0</span>)
+    <span class="fn">cout</span> &lt;&lt; <span class="str">"Strings are identical"</span>;
+
+<span class="fn">strstr</span>(s1, <span class="str">"orl"</span>);     <span class="cm">// returns pointer to first match in s1, or NULL</span>
+<span class="fn">strtok</span>(s1, <span class="str">" "</span>);       <span class="cm">// splits s1 by space, returns first token</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">getchar() — Character-by-Character Input</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;ctype.h&gt;</span>
+
+<span class="kw">char</span> c;
+<span class="kw">int</span>  lc <span class="op">=</span> <span class="num">0</span>, uc <span class="op">=</span> <span class="num">0</span>, digits <span class="op">=</span> <span class="num">0</span>;
+
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Type something, press Enter: "</span>;
+<span class="kw">while</span> ((c <span class="op">=</span> <span class="fn">getchar</span>()) <span class="op">!=</span> <span class="str">'\n'</span>)  <span class="cm">// read until Enter key</span>
+{
+    <span class="kw">if</span>      (<span class="fn">islower</span>(c)) lc<span class="op">++</span>;
+    <span class="kw">else if</span> (<span class="fn">isupper</span>(c)) uc<span class="op">++</span>;
+    <span class="kw">else if</span> (<span class="fn">isdigit</span>(c)) digits<span class="op">++</span>;
+}
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Lower: "</span> &lt;&lt; lc &lt;&lt; <span class="str">"  Upper: "</span> &lt;&lt; uc &lt;&lt; <span class="str">"  Digits: "</span> &lt;&lt; digits;</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ LEC 18 ══════════════ -->
+<div class="lecture" id="lec18">
+  <div class="lecture-header"><span class="lec-num">LEC 18</span><h2>File Handling — &lt;fstream.h&gt;</h2></div>
+  <div class="lecture-body">
+
+    <div class="topic">
+      <div class="topic-title">Why Files?</div>
+      <div class="topic-def">Computer memory (RAM) is <em class="key">volatile</em> — all data disappears when the power is off. Files on disk provide <em class="key">permanent storage</em>, allowing data to be saved and reused across program runs (e.g. a payroll system that saves employee data).</div>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">File Stream Types</div>
+      <div class="topic-def">
+        <span class="pill">ifstream</span> — Input: read from a file.<br>
+        <span class="pill">ofstream</span> — Output: write to a file.<br>
+        <span class="pill">fstream</span>  — Both read and write.
+      </div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;fstream.h&gt;</span>
+
+<span class="tp">ifstream</span> inFile;          <span class="cm">// handle for reading</span>
+<span class="tp">ofstream</span> outFile;         <span class="cm">// handle for writing</span></pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Basic File Handling — Open, Use, Close</div>
+<pre class="code"><span class="pp">#include</span> <span class="str">&lt;iostream.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;fstream.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;stdlib.h&gt;</span>    <span class="cm">// for exit()</span>
+
+<span class="kw">main</span>()
+{
+    <span class="tp">ifstream</span> inFile;
+    <span class="kw">char</span> name[<span class="num">50</span>], sal[<span class="num">10</span>];
+
+    inFile.<span class="fn">open</span>(<span class="str">"employees.txt"</span>);   <span class="cm">// open file for reading</span>
+
+    <span class="kw">if</span> (<span class="op">!</span>inFile)                       <span class="cm">// always check if opened OK</span>
+    {
+        <span class="fn">cout</span> &lt;&lt; <span class="str">"Error: cannot open file"</span>;
+        <span class="fn">exit</span>(<span class="num">1</span>);                       <span class="cm">// stop the program</span>
+    }
+
+    <span class="kw">while</span> (<span class="op">!</span>inFile.<span class="fn">eof</span>())             <span class="cm">// loop until end-of-file</span>
+    {
+        inFile &gt;&gt; name &gt;&gt; sal;         <span class="cm">// read word by word</span>
+        <span class="fn">cout</span> &lt;&lt; name &lt;&lt; <span class="str">"\t"</span> &lt;&lt; sal &lt;&lt; <span class="str">"\n"</span>;
+    }
+
+    inFile.<span class="fn">close</span>();                    <span class="cm">// always close when done</span>
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">File Opening Modes</div>
+<pre class="code"><span class="cm">// Open for reading (default for ifstream):</span>
+inFile.<span class="fn">open</span>(<span class="str">"data.txt"</span>, ios::in);
+
+<span class="cm">// Open for writing — creates new or empties existing file:</span>
+outFile.<span class="fn">open</span>(<span class="str">"out.txt"</span>, ios::out);
+
+<span class="cm">// Append mode — adds to end, preserves existing content:</span>
+outFile.<span class="fn">open</span>(<span class="str">"log.txt"</span>, ios::app);
+
+<span class="cm">// Open and position at end, can write anywhere (ate mode):</span>
+outFile.<span class="fn">open</span>(<span class="str">"data.txt"</span>, ios::ate);</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Writing to a File</div>
+<pre class="code"><span class="tp">ofstream</span> outFile;
+outFile.<span class="fn">open</span>(<span class="str">"result.txt"</span>, ios::out);
+
+<span class="kw">if</span> (<span class="op">!</span>outFile) { <span class="fn">cout</span> &lt;&lt; <span class="str">"Cannot create file"</span>; <span class="fn">exit</span>(<span class="num">1</span>); }
+
+outFile &lt;&lt; <span class="str">"Name"</span>   &lt;&lt; <span class="str">"\t"</span> &lt;&lt; <span class="str">"Salary"</span> &lt;&lt; <span class="str">"\n"</span>;
+outFile &lt;&lt; <span class="str">"Aamir"</span>  &lt;&lt; <span class="str">"\t"</span> &lt;&lt; <span class="num">14000</span>   &lt;&lt; <span class="str">"\n"</span>;
+outFile &lt;&lt; <span class="str">"Amara"</span>  &lt;&lt; <span class="str">"\t"</span> &lt;&lt; <span class="num">17000</span>   &lt;&lt; <span class="str">"\n"</span>;
+
+outFile.<span class="fn">close</span>();</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">get(), put() &amp; getline()</div>
+<pre class="code"><span class="cm">// get() — reads ONE character at a time (includes '\n')</span>
+<span class="kw">char</span> ch;
+<span class="kw">while</span> ((ch <span class="op">=</span> inFile.<span class="fn">get</span>()) <span class="op">!=</span> EOF)
+    outFile.<span class="fn">put</span>(ch);       <span class="cm">// put() writes one char — perfect file copy</span>
+
+<span class="cm">// getline() — reads entire line (faster than char-by-char)</span>
+<span class="kw">char</span> line[<span class="num">200</span>];
+<span class="kw">while</span> (<span class="op">!</span>inFile.<span class="fn">eof</span>())
+{
+    inFile.<span class="fn">getline</span>(line, <span class="num">200</span>);   <span class="cm">// reads up to 199 chars + '\0'</span>
+    <span class="fn">cout</span> &lt;&lt; line &lt;&lt; <span class="str">"\n"</span>;
+}</pre>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">File + strtok() — Parsing Lines</div>
+<pre class="code"><span class="cm">// Input file line: "Aamir 12000"</span>
+<span class="cm">// Goal: extract name and salary separately</span>
+<span class="pp">#include</span> <span class="str">&lt;string.h&gt;</span>
+<span class="pp">#include</span> <span class="str">&lt;stdlib.h&gt;</span>
+
+<span class="kw">char</span> line[<span class="num">100</span>];
+<span class="kw">int</span>  totalSalary <span class="op">=</span> <span class="num">0</span>;
+
+<span class="kw">while</span> (<span class="op">!</span>inFile.<span class="fn">eof</span>())
+{
+    inFile.<span class="fn">getline</span>(line, <span class="num">100</span>);
+
+    <span class="kw">char</span> <span class="op">*</span>token <span class="op">=</span> <span class="fn">strtok</span>(line, <span class="str">" "</span>);   <span class="cm">// first token = name</span>
+    token        <span class="op">=</span> <span class="fn">strtok</span>(NULL, <span class="str">" "</span>);   <span class="cm">// second token = salary string</span>
+
+    totalSalary <span class="op">+=</span> <span class="fn">atoi</span>(token);          <span class="cm">// convert salary string to int</span>
+}
+<span class="fn">cout</span> &lt;&lt; <span class="str">"Total salaries: "</span> &lt;&lt; totalSalary;</pre>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- end container -->
+
+<footer>CS201 – Introduction to Programming &nbsp;·&nbsp; Lectures 1–18 Complete Study Guide &nbsp;·&nbsp; All code examples in proper C syntax</footer>
+</body>
+</html>
